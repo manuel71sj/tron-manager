@@ -135,7 +135,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.is_active and self.is_superuser:
             return True
 
-        # Otherwise we need to check the backends.
+        # Otherwise, we need to check the backends.
         return _user_has_perm(self, perm, obj)
 
     def has_module_perms(self, app_label):
@@ -150,9 +150,5 @@ class User(AbstractBaseUser, PermissionsMixin):
         return _user_has_module_perms(self, app_label)
 
     def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
+        """Send email this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
-
-    """
-    {  "_id": {    "$oid": "624f801bdd611089cb799f7b"  },  "id": 1,  "password": "pbkdf2_sha256$320000$NCMTwkFIF08BF7Qch1htDp$VqSYG6tKMwlx3SBoVjqNUp68z5hj1o40LVMekWxuyE0=",  "last_login": {    "$date": "2022-04-08T08:31:21.274Z"  },  "is_superuser": true,  "email": "mc.han@legaltech.co.kr",  "name": "한만철",  "is_staff": true,  "is_admin": true,  "is_active": true,  "date_joined": {    "$date": "2022-04-08T00:21:47Z"  }}
-    """

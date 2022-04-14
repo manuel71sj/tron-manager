@@ -246,11 +246,11 @@ logging.config.dictConfig({
             'propagate': False,
         },
         # default for all undefined Python modules
-        # '': {
-        #     'level': LOG_LEVEL,
-        #     'handlers': ['console', 'file'],
-        #     'propagate': False,
-        # },
+        '': {
+            'level': LOG_LEVEL,
+            'handlers': ['console', 'file'],
+            'propagate': False,
+        },
     },
 })
 
