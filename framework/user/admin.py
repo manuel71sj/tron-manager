@@ -133,5 +133,5 @@ class UserAdmin(BaseUserAdmin):
 
 
 # ... and, since we're not using Django's built-in permissions,
-# unregister the Group model from admin.
+# unregister the Group model from fromadmin.
 admin.site.unregister(Group)

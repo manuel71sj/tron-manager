@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_yasg',
     'rest_framework',
-    'framework.user'
+    'framework.user',
+    'tron'
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'framework/templates',
+            BASE_DIR / 'tron/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
