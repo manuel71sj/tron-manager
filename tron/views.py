@@ -2,22 +2,20 @@
 import logging
 
 import eth_keys
-import solcx
 import tronpy
 from django.http import JsonResponse
-from django.template.loader import render_to_string
 from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from solcx.exceptions import SolcError
 from tronapi import Tron as TR, HttpProvider
-from tronpy import Tron, Contract
+from tronpy import Tron
 from tronpy.exceptions import BadKey
 from tronpy.keys import PrivateKey
 
-from boot.settings import STATIC_ROOT
 from framework.util.common import is_url
+from tron.module import compile_nft
 from tron.serializers import TronCreateSerializer, TronMintSerializer
 
 logger = logging.getLogger(__name__)
@@ -48,19 +46,7 @@ def contract_create_sample(request):
     try:
         priv_key = PrivateKey.fromhex(tr.private_key)
 
-        solcx.install.get_executable('0.5.18', STATIC_ROOT / 'solcd/')
-
-        context = dict(name=serializer.data['name'], symbol=serializer.data['symbol'])
-        sol = render_to_string('contract/nft.sol', context)
-
-        compiled_sol = solcx.compile_source(
-            sol,
-            output_values=['abi', 'bin'],
-        )
-
-        contract_interface = compiled_sol['<stdin>:TRC721Token']
-
-        cntr = Contract(name=serializer.data['name'], bytecode=contract_interface['bin'], abi=contract_interface['abi'])
+        cntr = compile_nft(name=serializer.data['name'], symbol=serializer.data['symbol'])
 
         txn = (
             tron.trx.deploy_contract(tr.default_address.get('base58'), cntr)
@@ -68,10 +54,7 @@ def contract_create_sample(request):
                 .build()
                 .sign(priv_key)
         )
-        print(txn.txid)
         result = txn.broadcast().wait()
-        print(result)
-        print('Created:', result['contract_address'])
 
         '''
         result.get('result')) 가 success 일때만 계속 진행, failed여도 contract_address가 생성됨
