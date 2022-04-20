@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from framework.module.BaseModelMixin import BaseModelMixin
+from framework.module.BaseMixin import BaseModelMixin
 from framework.user.models import User
 
 

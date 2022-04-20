@@ -1,9 +1,9 @@
-from rest_framework import serializers
-
+from framework.module.BaseMixin import BaseModelSerializerMixin
 from wallet.models import Wallet
 
 
-class WalletSerializer(serializers.ModelSerializer):
+class WalletSerializer(BaseModelSerializerMixin):
     class Meta:
         model = Wallet
-        fields = '__all__'
+        exclude = ('deleted',)
+        # fields = '__all__'
