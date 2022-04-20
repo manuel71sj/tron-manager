@@ -14,7 +14,7 @@ from tronpy import Tron
 from tronpy.exceptions import BadKey
 from tronpy.keys import PrivateKey
 
-from framework.util.common import is_url
+from framework.module.common import is_url
 from tron.module import compile_nft
 from tron.serializers import TronCreateSerializer, TronMintSerializer
 

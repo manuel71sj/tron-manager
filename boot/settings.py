@@ -46,8 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_yasg',
     'rest_framework',
+    'django_extensions',
     'framework.user',
-    'tron'
+    'tron',
+    'wallet'
 ]
 
 MIDDLEWARE = [
@@ -100,26 +102,44 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-MONGO_HOST = config.MONGODB.get('host')
-MONGO_PORT = int(config.MONGODB.get('port'))
-MONGO_USER = config.MONGODB.get('user')
-MONGO_PASSWORD = config.MONGODB.get('password')
-MONGO_AUTH_SOURCE = config.MONGODB.get('auth_source')
-MONGO_NAME = config.MONGODB.get('database')
-MONGO_TEST_NAME = config.MONGODB.get('test_database')
+# MONGO_HOST = config.MONGODB.get('host')
+# MONGO_PORT = int(config.MONGODB.get('port'))
+# MONGO_USER = config.MONGODB.get('user')
+# MONGO_PASSWORD = config.MONGODB.get('password')
+# MONGO_AUTH_SOURCE = config.MONGODB.get('auth_source')
+# MONGO_NAME = config.MONGODB.get('database')
+# MONGO_TEST_NAME = config.MONGODB.get('test_database')
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': MONGO_NAME,
+#         'CLIENT': {
+#             'host': MONGO_HOST,
+#             'port': MONGO_PORT,
+#             'username': MONGO_USER,
+#             'password': MONGO_PASSWORD,
+#             'authSource': MONGO_AUTH_SOURCE,
+#             'authMechanism': 'SCRAM-SHA-1'
+#         },
+#     }
+# }
+
+
+MARIADB_HOST = config.MARIADB.get('host')
+MARIADB_PORT = int(config.MARIADB.get('port'))
+MARIADB_USER = config.MARIADB.get('user')
+MARIADB_PASSWORD = config.MARIADB.get('password')
+MARIADB_NAME = config.MARIADB.get('database')
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': MONGO_NAME,
-        'CLIENT': {
-            'host': MONGO_HOST,
-            'port': MONGO_PORT,
-            'username': MONGO_USER,
-            'password': MONGO_PASSWORD,
-            'authSource': MONGO_AUTH_SOURCE,
-            'authMechanism': 'SCRAM-SHA-1'
-        },
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': MARIADB_NAME,
+        'USER': MARIADB_USER,
+        'PASSWORD': MARIADB_PASSWORD,
+        'HOST': MARIADB_HOST,
+        'PORT': MARIADB_PORT,
+        'AUTOCOMMIT': 'True'
     }
 }
 
@@ -237,11 +257,11 @@ logging.config.dictConfig({
             'handlers': ['console'],
             'propagate': False,
         },
-        'djongo': {
-            'level': 'INFO',
-            'handlers': ['console'],
-            'propagate': False,
-        },
+        # 'djongo': {
+        #     'level': 'INFO',
+        #     'handlers': ['console'],
+        #     'propagate': False,
+        # },
         'django.server': {
             'level': 'INFO',
             'handlers': ['console', 'file.server'],

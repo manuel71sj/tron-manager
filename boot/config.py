@@ -15,3 +15,7 @@ for (k, v) in config.items('DEFAULT'):
 MONGODB = dict()
 for (k, v) in config.items('MongoDB'):
     MONGODB[k] = v
+
+MARIADB = dict()
+for (k, v) in config.items('MariaDB'):
+    MARIADB[k] = v
