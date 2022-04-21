@@ -18,6 +18,7 @@ mysqlclient = "*"
 celery = "*"
 redis = "*"
 django-celery-beat = "*"
+flower = "*"
 
 [dev-packages]
 
