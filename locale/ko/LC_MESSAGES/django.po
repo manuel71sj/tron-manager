@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-11 17:15+0900\n"
+"POT-Creation-Date: 2022-04-21 16:44+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: boot/settings.py:144
+#: boot/settings.py:179
 msgid "Korean"
 msgstr ""
 
-#: boot/settings.py:145
+#: boot/settings.py:180
 msgid "Japanese"
 msgstr ""
 
-#: boot/settings.py:146
+#: boot/settings.py:181
 msgid "English"
+msgstr ""
+
+#: framework/module/BaseMixin.py:7
+msgid "is_deleted"
+msgstr ""
+
+#: framework/module/BaseMixin.py:9
+msgid "created"
+msgstr ""
+
+#: framework/module/BaseMixin.py:10
+msgid "updated"
 msgstr ""
 
 #: framework/user/admin.py:40
@@ -83,48 +95,61 @@ msgstr ""
 msgid "Password (again)"
 msgstr ""
 
-#: framework/user/models.py:82
+#: framework/user/models.py:81
 msgid "email address"
 msgstr ""
 
-#: framework/user/models.py:84
+#: framework/user/models.py:83
 msgid "A user with that username already exists."
 msgstr ""
 
-#: framework/user/models.py:87
+#: framework/user/models.py:86
 msgid "name"
 msgstr ""
 
-#: framework/user/models.py:89
+#: framework/user/models.py:88
 msgid "staff status"
 msgstr "직원 권한"
 
-#: framework/user/models.py:91 framework/user/models.py:96
+#: framework/user/models.py:90 framework/user/models.py:95
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 
-#: framework/user/models.py:94
+#: framework/user/models.py:93
 msgid "admin status"
 msgstr "관리자 권한"
 
-#: framework/user/models.py:99
+#: framework/user/models.py:98
 msgid "active"
 msgstr ""
 
-#: framework/user/models.py:102
+#: framework/user/models.py:101
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: framework/user/models.py:106
+#: framework/user/models.py:105
 msgid "date joined"
 msgstr ""
 
-#: framework/user/models.py:114
+#: framework/user/models.py:113 wallet/models.py:14
 msgid "user"
 msgstr ""
 
-#: framework/user/models.py:115
+#: framework/user/models.py:114
 msgid "users"
 msgstr ""
+
+#: wallet/models.py:16
+msgid "지갑주소"
+msgstr ""
+
+#: wallet/models.py:17
+msgid "개인키"
+msgstr ""
+
+#: wallet/models.py:20 wallet/models.py:21
+msgid "지갑"
+msgstr ""
+
