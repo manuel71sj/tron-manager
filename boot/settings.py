@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'django_extensions',
+    'django_celery_beat',
     'framework.user',
     'tron',
     'wallet'
@@ -278,3 +279,22 @@ logging.config.dictConfig({
 
 log = logger.getLogger(__name__)
 log.info('BASE_DIR: %s' % BASE_DIR)
+
+CELERY_BROKER_URL = 'amqp://tronmanager:dYvca5-sibcur-pydpec@129.154.59.231:5672/TronManager'
+CELERY_RESULT_BACKEND = 'redis://manuel71:P9661144!@152.67.199.109:16379/10'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']  # JSON을 제외한 다른 content 설정들은 무시
+CELERY_TIMEZONE = 'Asia/Seoul'
+CELERY_ENABLE_UTC = True
+
+CELERY_TASK_ROUTES = {
+    'tron.tasks.add': 'low-priority',
+}
+
+CELERY_TASK_ANNOTATIONS = {
+    'tron.tasks.add': {'rate_limit': '10/m'},
+}

@@ -15,6 +15,9 @@ tronapi = "*"
 django-extensions = "*"
 werkzeug = "*"  # for django-extensions runserver_plus
 mysqlclient = "*"
+celery = "*"
+redis = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 
