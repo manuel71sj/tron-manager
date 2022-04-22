@@ -9,7 +9,6 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from solcx.exceptions import SolcError
-from tronapi import Tron as TR, HttpProvider
 from tronpy import Tron
 from tronpy.exceptions import BadKey
 from tronpy.keys import PrivateKey
@@ -22,14 +21,6 @@ logger = logging.getLogger(__name__)
 
 tron = Tron(network='shasta')
 
-full_node = HttpProvider('https://api.shasta.trongrid.io')
-solidity_node = HttpProvider('https://api.shasta.trongrid.io')
-event_server = HttpProvider('https://api.shasta.trongrid.io')
-
-tr = TR(full_node=full_node,
-        solidity_node=solidity_node,
-        event_server=event_server)
-
 
 @swagger_auto_schema(method='post', request_body=TronCreateSerializer, )
 @api_view(['POST'])
@@ -37,8 +28,6 @@ tr = TR(full_node=full_node,
 def contract_create_sample(request):
     # tr.private_key = '35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff'
     # tr.default_address = tr.address.from_private_key(tr.private_key).base58  # 'TV7XSJcaxxi8MA7ABqeDgY9uKSizCTZGkw'
-    tr.private_key = 'ed968e840d10d2d313a870bc131a4e2c311d7ad09bdf32b3418147221f51a6e2'
-    tr.default_address = tr.address.from_private_key(tr.private_key).base58  # 'TV7XSJcaxxi8MA7ABqeDgY9uKSizCTZGkw'
 
     serializer = TronCreateSerializer(data=request.data)
 
@@ -46,12 +35,12 @@ def contract_create_sample(request):
         return JsonResponse({'result': 'FAILED'})
 
     try:
-        priv_key = PrivateKey.fromhex(tr.private_key)
+        priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff')
 
         cntr = compile_nft(name=serializer.data['name'], symbol=serializer.data['symbol'])
 
         txn = (
-            tron.trx.deploy_contract(tr.default_address.get('base58'), cntr)
+            tron.trx.deploy_contract(priv_key.public_key.to_base58check_address(), cntr)
                 .fee_limit(10 ** 9)
                 .build()
                 .sign(priv_key)
@@ -124,14 +113,10 @@ def mint_nft_sample(request):
         if token_id == 0 or token_id == None:
             token_id = int(timezone.now().timestamp())
 
-        tr.private_key = serializer.data['owner_private_key']
-        tr.default_address = tr.address.from_private_key(tr.private_key).base58
-        priv_key = PrivateKey.fromhex(tr.private_key)
+        private_key = PrivateKey.fromhex(serializer.data['owner_private_key'])
+        address = private_key.public_key.to_base58check_address()
 
-        print(tr.private_key)
-        print(tr.default_address)
-
-        if tr.default_address.base58 != serializer.data['owner_address']:
+        if address != serializer.data['owner_address']:
             return JsonResponse({'result': 'FAILED',
                                  'msg': 'owner_address(%s) is not match private key' % serializer.data[
                                      'owner_address']})
@@ -152,7 +137,7 @@ def mint_nft_sample(request):
             token_uri
         )
 
-        trx = mint.with_owner(tr.default_address.base58).fee_limit(10 ** 9).build().sign(priv_key)
+        trx = mint.with_owner(address).fee_limit(10 ** 9).build().sign(private_key)
         result = trx.broadcast().wait()
 
         return JsonResponse({'contract': contract.name, 'symbol': contract.functions.symbol(), 'result': result})
@@ -162,7 +147,6 @@ def mint_nft_sample(request):
 
 
 def sample(request):
-    # aa = '4174fcf179ef88f94a4ac2bfb7da0c9808573e11d9'
     bb = 'TKa7pNb36iZ4zdE4o5G3C4qHPEKRsiRbEi'
     return JsonResponse({'address': tron.address.to_hex(bb)})
 

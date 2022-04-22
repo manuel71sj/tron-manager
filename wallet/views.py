@@ -52,3 +52,50 @@ def create_wallet(request):
         'private_key': result['private_key'],
         'passphrase': result['passphrase']
     }})
+
+
+@swagger_auto_schema(method='get')
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def use_wallet(request, pk):
+    """
+    사용할 지갑을 선택한다
+
+    Args:
+        request:
+        pk: wallet_id
+
+    Returns:
+        null: 'SUCCESS' or 'FAILED'
+
+    """
+    wallet = Wallet.objects.filter(user=request.user, id=pk)
+
+    if wallet.count() <= 0:
+        try:
+            del request.session['w-k']
+        except KeyError:
+            pass
+
+        return JsonResponse({'result': 'FAILED'})
+
+    request.session['w-k'] = wallet[0].id
+    return JsonResponse({
+        'result': 'SUCCESS'
+    })
+
+
+@swagger_auto_schema(method='get')
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def test_session(request):
+    try:
+        return JsonResponse({
+            'result': 'SUCCESS',
+            'data': request.session['w-k']
+        })
+    except KeyError:
+        return JsonResponse({
+            'result': 'SUCCESS',
+            'data': None
+        })
