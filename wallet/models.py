@@ -13,8 +13,9 @@ class Wallet(BaseModelMixin):
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, verbose_name=_("user"))
 
-    address = models.CharField(_('지갑주소'), max_length=32, null=False)
+    address = models.CharField(_('지갑주소'), max_length=34, null=False)
     private_key = models.CharField(_('개인키'), max_length=64, null=False)
+    passphrase = models.CharField(_('암호'), max_length=255, null=True, default=None)
 
     class Meta:
         verbose_name = _('지갑')

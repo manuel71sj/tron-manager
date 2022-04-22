@@ -20,11 +20,11 @@ from tron.serializers import TronCreateSerializer, TronMintSerializer
 
 logger = logging.getLogger(__name__)
 
+tron = Tron(network='shasta')
+
 full_node = HttpProvider('https://api.shasta.trongrid.io')
 solidity_node = HttpProvider('https://api.shasta.trongrid.io')
 event_server = HttpProvider('https://api.shasta.trongrid.io')
-
-tron = Tron(network='shasta')
 
 tr = TR(full_node=full_node,
         solidity_node=solidity_node,
@@ -35,7 +35,9 @@ tr = TR(full_node=full_node,
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def contract_create_sample(request):
-    tr.private_key = '35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff'
+    # tr.private_key = '35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff'
+    # tr.default_address = tr.address.from_private_key(tr.private_key).base58  # 'TV7XSJcaxxi8MA7ABqeDgY9uKSizCTZGkw'
+    tr.private_key = 'ed968e840d10d2d313a870bc131a4e2c311d7ad09bdf32b3418147221f51a6e2'
     tr.default_address = tr.address.from_private_key(tr.private_key).base58  # 'TV7XSJcaxxi8MA7ABqeDgY9uKSizCTZGkw'
 
     serializer = TronCreateSerializer(data=request.data)
@@ -84,6 +86,9 @@ def contract_create_sample(request):
     except tronpy.exceptions.ValidationError as tronpy_validation_error:
         logger.exception(tronpy_validation_error)
         return JsonResponse({'result': 'FAILED', 'err': tronpy_validation_error.args})
+    except tronpy.exceptions.UnknownError as unknown_error:
+        logger.exception(unknown_error)
+        return JsonResponse({'result': 'FAILED', 'err': unknown_error.args})
 
 
 @swagger_auto_schema(method='post', request_body=TronMintSerializer, )
@@ -160,3 +165,13 @@ def sample(request):
     # aa = '4174fcf179ef88f94a4ac2bfb7da0c9808573e11d9'
     bb = 'TKa7pNb36iZ4zdE4o5G3C4qHPEKRsiRbEi'
     return JsonResponse({'address': tron.address.to_hex(bb)})
+
+
+'''
+컨펌된 블록 확인
+getTransactionInfoById 로 blocknumber 확인 후
+getNowBlock과의 차이를 카운트 하여 19 이상이면 confirm된 트랜젝션으로 확인
+
+getTransactionById의 contractRet는 evm메세지 일뿐 최종 확인은 컨펌 수로 확인해야 함
+
+'''

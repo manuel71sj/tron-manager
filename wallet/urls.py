@@ -10,4 +10,5 @@ router.register('', wallet_views.WalletViewSet, basename="wallet")
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('generate', wallet_views.create_wallet, name='generate_wallet')
 ]
