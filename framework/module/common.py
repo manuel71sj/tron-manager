@@ -7,3 +7,7 @@ def is_url(url):
         return all([result.scheme, result.netloc])
     except ValueError:
         return False
+
+
+def getFieldsModel(model):
+    return [field.name for field in model._meta.get_fields()]

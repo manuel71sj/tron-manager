@@ -89,11 +89,11 @@ def use_wallet(request, pk):
         except KeyError:
             pass
 
-        return JsonResponse({'result': 'FAILED'})
+        raise BusinessError('FAILED')
 
     request.session['w-k'] = wallet[0].id
-    return JsonResponse({
-        'result': 'SUCCESS'
+    return Response({
+        'key_id ': wallet[0].id
     })
 
 

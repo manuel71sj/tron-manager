@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'framework.user',
     'tron',
-    'wallet'
+    'wallet',
+    'transaction',
 ]
 
 MIDDLEWARE = [

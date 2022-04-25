@@ -1,8 +1,8 @@
 # Create your views here.
 import logging
 
-from django.http import JsonResponse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.permissions import AllowAny
@@ -13,8 +13,11 @@ from tronpy.keys import PrivateKey
 from boot.exceptions import BusinessError
 from boot.renderers import CustomRenderer
 from framework.module.common import is_url
+from transaction.models import Transaction
+from transaction.serializers import TransactionSerializer
 from tron.module import compile_nft
 from tron.serializers import TronCreateSerializer, TronMintSerializer
+from wallet.models import Wallet
 
 logger = logging.getLogger(__name__)
 
@@ -25,17 +28,21 @@ tron = Tron(network='shasta')
 @api_view(['POST'])
 @renderer_classes([CustomRenderer])
 @permission_classes([AllowAny])
-def contract_create_sample(request):
-    # tr.private_key = '35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff'
-    # tr.default_address = tr.address.from_private_key(tr.private_key).base58  # 'TV7XSJcaxxi8MA7ABqeDgY9uKSizCTZGkw'
-
+def contract_create(request):
     serializer = TronCreateSerializer(data=request.data)
 
-    if not serializer.is_valid():
-        return JsonResponse({'result': 'FAILED'})
+    serializer.is_valid(raise_exception=True)
 
     try:
-        priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff')
+
+        wallet_id = request.session['w-k']
+        wallet = Wallet.objects.get(id=wallet_id, user=request.user)
+
+        priv_key = PrivateKey.fromhex(wallet.private_key)
+        address = priv_key.public_key.to_base58check_address()
+
+        if (wallet.address != address):
+            raise BusinessError(_('PrivateKey address mismatch'))
 
         cntr = compile_nft(name=serializer.data['name'], symbol=serializer.data['symbol'])
 
@@ -51,15 +58,9 @@ def contract_create_sample(request):
         result.get('result')) 가 success 일때만 계속 진행, failed여도 contract_address가 생성됨
         '''
 
-        created_cntr = tron.get_contract(result['contract_address'])
+        transaction = Transaction.crate_contract(txn.txid, result, request.user)
 
-        report = {
-            'result': result,
-            'txid': txn.txid,
-            'contract_address': created_cntr.contract_address,
-        }
-
-        return Response({'report': report})
+        return Response(TransactionSerializer(transaction).data)
     except Exception as e:
         logger.exception(e)
         raise BusinessError(e)
@@ -68,7 +69,7 @@ def contract_create_sample(request):
 @swagger_auto_schema(method='post', request_body=TronMintSerializer, )
 @api_view(['post'])
 @permission_classes([AllowAny])
-def mint_nft_sample(request):
+def mint_nft(request):
     '''
     OWNER TV7XSJcaxxi8MA7ABqeDgY9uKSizCTZGkw
     35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff
@@ -87,8 +88,7 @@ def mint_nft_sample(request):
     try:
         serializer = TronMintSerializer(data=request.data)
 
-        if not serializer.is_valid():
-            raise BusinessError('validation failed')
+        serializer.is_valid(raise_exception=True)
 
         token_uri = serializer.data['token_uri']
         if (not is_url(token_uri)):
@@ -98,8 +98,14 @@ def mint_nft_sample(request):
         if token_id == 0 or token_id == None:
             token_id = int(timezone.now().timestamp())
 
-        private_key = PrivateKey.fromhex(serializer.data['owner_private_key'])
+        wallet_id = request.session['w-k']
+        wallet = Wallet.objects.get(id=wallet_id, user=request.user)
+
+        private_key = PrivateKey.fromhex(wallet.private_key)
         address = private_key.public_key.to_base58check_address()
+
+        if (wallet.address != address):
+            raise BusinessError(_('PrivateKey address mismatch'))
 
         if address != serializer.data['owner_address']:
             raise BusinessError('owner_address(%s) is not match private key' % serializer.data[
@@ -107,7 +113,7 @@ def mint_nft_sample(request):
 
         contract = tron.get_contract(serializer.data['contract_address'])
 
-        is_minter = contract.functions.isMinter(priv_key.public_key.to_base58check_address())
+        is_minter = contract.functions.isMinter(address)
         if (not is_minter):
             raise BusinessError(is_minter)
 
@@ -128,11 +134,6 @@ def mint_nft_sample(request):
     except Exception as e:
         logger.exception(e)
         raise BusinessError(e)
-
-
-def sample(request):
-    bb = 'TKa7pNb36iZ4zdE4o5G3C4qHPEKRsiRbEi'
-    return JsonResponse({'address': tron.address.to_hex(bb)})
 
 
 '''
