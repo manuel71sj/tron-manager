@@ -25,9 +25,17 @@ def api_exception_handler(exec, context: Dict[str, Any]) -> Union[JsonResponse, 
             error_payload['message'] = http_code_to_message[status_code]
             error_payload['details'] = response.data
         else:
-            error_payload['message'] = exec.default_code
-            error_payload['details'] = exec.detail
+            if hasattr(exec, 'default_code'):
+                error_payload['message'] = exec.default_code
+            else:
+                error_payload['message'] = http_code_to_message[status_code]
+
+            if hasattr(exec, 'detail'):
+                error_payload['details'] = exec.detail
+            else:
+                error_payload['details'] = exec.args[0]
 
         response.data = error_payload
+        response.exception = True
 
     return response

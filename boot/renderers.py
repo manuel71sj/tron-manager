@@ -12,7 +12,7 @@ class CustomRenderer(JSONRenderer):
         response, data 의 정보를 활용하여 커스텀한 응답 형태를 만들 수 있습니다.  
         """
         result_payload = {
-            'result': False,
+            'status': False,
             'data': {},
             'error': {}
         }
@@ -20,7 +20,7 @@ class CustomRenderer(JSONRenderer):
         if (response.exception):
             result_payload['error'] = data
         else:
-            result_payload['result'] = True
+            result_payload['status'] = True
             result_payload['data'] = data
 
         renderer_context['response'].data = result_payload
