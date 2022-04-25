@@ -6,6 +6,7 @@ from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from tronpy import Tron
 from tronpy.keys import PrivateKey
 
@@ -34,8 +35,7 @@ def contract_create_sample(request):
         return JsonResponse({'result': 'FAILED'})
 
     try:
-        # priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff')
-        priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2aa')
+        priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff')
 
         cntr = compile_nft(name=serializer.data['name'], symbol=serializer.data['symbol'])
 
@@ -59,7 +59,7 @@ def contract_create_sample(request):
             'contract_address': created_cntr.contract_address,
         }
 
-        return JsonResponse({'report': report})
+        return Response({'report': report})
     except Exception as e:
         logger.exception(e)
         raise BusinessError(e)
@@ -88,11 +88,11 @@ def mint_nft_sample(request):
         serializer = TronMintSerializer(data=request.data)
 
         if not serializer.is_valid():
-            return JsonResponse({'result': 'FAILED', 'msg': 'validation failed'})
+            raise BusinessError('validation failed')
 
         token_uri = serializer.data['token_uri']
         if (not is_url(token_uri)):
-            return JsonResponse({'result': 'FAILED', 'msg': 'token_uri(%s) is not uri type' % token_uri})
+            raise BusinessError('token_uri(%s) is not uri type' % token_uri)
 
         token_id = serializer.data['token_id']
         if token_id == 0 or token_id == None:
@@ -102,19 +102,18 @@ def mint_nft_sample(request):
         address = private_key.public_key.to_base58check_address()
 
         if address != serializer.data['owner_address']:
-            return JsonResponse({'result': 'FAILED',
-                                 'msg': 'owner_address(%s) is not match private key' % serializer.data[
-                                     'owner_address']})
+            raise BusinessError('owner_address(%s) is not match private key' % serializer.data[
+                'owner_address'])
 
         contract = tron.get_contract(serializer.data['contract_address'])
 
-        is_minter = contract.functions.isMinter(tr.default_address.base58)
+        is_minter = contract.functions.isMinter(priv_key.public_key.to_base58check_address())
         if (not is_minter):
-            return JsonResponse({'result': 'FAILED', 'msg': is_minter})
+            raise BusinessError(is_minter)
 
         to_address = serializer.data['to_address']
         if (not tron.is_address(to_address)):
-            return JsonResponse({'result': 'FAILED', 'msg': 'to_address(%s) is not address type' % to_address})
+            raise BusinessError('to_address(%s) is not address type' % to_address)
 
         mint = contract.functions.mintWithTokenURI(
             to_address,
@@ -125,10 +124,10 @@ def mint_nft_sample(request):
         trx = mint.with_owner(address).fee_limit(10 ** 9).build().sign(private_key)
         result = trx.broadcast().wait()
 
-        return JsonResponse({'contract': contract.name, 'symbol': contract.functions.symbol(), 'result': result})
+        return Response({'contract': contract.name, 'symbol': contract.functions.symbol(), 'result': result})
     except Exception as e:
         logger.exception(e)
-        return JsonResponse({'result': 'FAILED', 'err': e.args})
+        raise BusinessError(e)
 
 
 def sample(request):

@@ -4,10 +4,12 @@ import logging
 from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.exceptions import APIException
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
+from boot.exceptions import BusinessError
+from boot.renderers import CustomRenderer
 from tron.module import generate_wallet
 from wallet.models import Wallet
 from wallet.serializers import WalletSerializer, WalletCreateSerializer
@@ -18,6 +20,7 @@ logger = logging.getLogger(__name__)
 class WalletViewSet(viewsets.ModelViewSet):
     queryset = Wallet.objects.all().order_by('-created_at')
     serializer_class = WalletSerializer
+    renderer_classes = [CustomRenderer]
 
     permission_classes = [permissions.IsAuthenticated]
 
@@ -31,6 +34,7 @@ class WalletViewSet(viewsets.ModelViewSet):
 
 @swagger_auto_schema(method='post', request_body=WalletCreateSerializer)
 @api_view(['POST'])
+@renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
 def create_wallet(request):
     """
@@ -63,6 +67,7 @@ def create_wallet(request):
 
 @swagger_auto_schema(method='get')
 @api_view(['GET'])
+@renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
 def use_wallet(request, pk):
     """
@@ -94,19 +99,13 @@ def use_wallet(request, pk):
 
 @swagger_auto_schema(method='get')
 @api_view(['GET'])
+@renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
 def test_session(request):
     print(request.session.__dict__)
 
-    APIException
-
     try:
-        return JsonResponse({
-            'result': 'SUCCESS',
-            'data': request.session['w-k']
-        })
-    except KeyError:
-        return JsonResponse({
-            'result': 'SUCCESS',
-            'data': None
-        })
+        return Response(request.session['w-k'])
+    except Exception as e:
+        logger.exception(e)
+        raise BusinessError(e)
