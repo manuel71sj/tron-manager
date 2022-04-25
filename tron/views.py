@@ -1,18 +1,16 @@
 # Create your views here.
 import logging
 
-import eth_keys
-import tronpy
 from django.http import JsonResponse
 from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.permissions import AllowAny
-from solcx.exceptions import SolcError
 from tronpy import Tron
-from tronpy.exceptions import BadKey
 from tronpy.keys import PrivateKey
 
+from boot.exceptions import BusinessError
+from boot.renderers import CustomRenderer
 from framework.module.common import is_url
 from tron.module import compile_nft
 from tron.serializers import TronCreateSerializer, TronMintSerializer
@@ -24,6 +22,7 @@ tron = Tron(network='shasta')
 
 @swagger_auto_schema(method='post', request_body=TronCreateSerializer, )
 @api_view(['POST'])
+@renderer_classes([CustomRenderer])
 @permission_classes([AllowAny])
 def contract_create_sample(request):
     # tr.private_key = '35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff'
@@ -35,7 +34,8 @@ def contract_create_sample(request):
         return JsonResponse({'result': 'FAILED'})
 
     try:
-        priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff')
+        # priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2ff')
+        priv_key = PrivateKey.fromhex('35d80f0adb3149f594f32195603c2f27194c52d1da7e56046ce10b388f88a2aa')
 
         cntr = compile_nft(name=serializer.data['name'], symbol=serializer.data['symbol'])
 
@@ -60,24 +60,9 @@ def contract_create_sample(request):
         }
 
         return JsonResponse({'report': report})
-    except SolcError as solc_error:
-        logger.exception(solc_error)
-        return JsonResponse({'result': 'FAILED', 'err': solc_error.message})
-    except BadKey as bad_key:
-        logger.exception(bad_key)
-        return JsonResponse({'result': 'FAILED', 'err': bad_key.args})
-    except TypeError as type_error:
-        logger.exception(type_error)
-        return JsonResponse({'result': 'FAILED', 'err': type_error.args})
-    except eth_keys.exceptions.ValidationError as eth_keys_validation_error:
-        logger.exception(eth_keys_validation_error)
-        return JsonResponse({'result': 'FAILED', 'err': eth_keys_validation_error})
-    except tronpy.exceptions.ValidationError as tronpy_validation_error:
-        logger.exception(tronpy_validation_error)
-        return JsonResponse({'result': 'FAILED', 'err': tronpy_validation_error.args})
-    except tronpy.exceptions.UnknownError as unknown_error:
-        logger.exception(unknown_error)
-        return JsonResponse({'result': 'FAILED', 'err': unknown_error.args})
+    except Exception as e:
+        logger.exception(e)
+        raise BusinessError(e)
 
 
 @swagger_auto_schema(method='post', request_body=TronMintSerializer, )

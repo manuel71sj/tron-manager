@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 
 from tron.module import generate_wallet
@@ -32,6 +33,12 @@ class WalletViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_wallet(request):
+    """
+    지갑 생성
+
+    Args:
+        request: { passphrase: '암호' or None }
+    """
     serializer = WalletCreateSerializer(data=request.data)
 
     if not serializer.is_valid():
@@ -89,6 +96,10 @@ def use_wallet(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def test_session(request):
+    print(request.session.__dict__)
+
+    APIException
+
     try:
         return JsonResponse({
             'result': 'SUCCESS',
