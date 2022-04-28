@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 from boot.exceptions import BusinessError
 from boot.renderers import CustomRenderer
-from tron.module import generate_wallet
+from tron.module import generate_wallet, generate_address_with_passphrase
 from wallet.models import Wallet
 from wallet.serializers import WalletSerializer, WalletCreateSerializer
 
@@ -32,7 +32,7 @@ class WalletViewSet(viewsets.ModelViewSet):
         instance.save()
 
 
-@swagger_auto_schema(method='post', request_body=WalletCreateSerializer)
+@swagger_auto_schema(method='post', request_body=WalletCreateSerializer, deprecated=True)
 @api_view(['POST'])
 @renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
@@ -63,6 +63,29 @@ def create_wallet(request):
         'private_key': result['private_key'],
         'passphrase': result['passphrase']
     }})
+
+
+@swagger_auto_schema(method='get')
+@api_view(['GET'])
+@renderer_classes([CustomRenderer])
+@permission_classes([IsAuthenticated])
+def create_wallet_with_passphrase(request):
+    """
+    암호로 지갑 생성
+    """
+
+    result = generate_address_with_passphrase()
+
+    wallet = Wallet.objects.create(
+        user=request.user,
+        address=result['address'],
+        private_key=result['private_key'],
+        passphrase=result['passphrase']
+    )
+
+    result['wallet_id'] = wallet.id
+
+    return Response(result)
 
 
 @swagger_auto_schema(method='get')
@@ -109,3 +132,5 @@ def test_session(request):
     except Exception as e:
         logger.exception(e)
         raise BusinessError(e)
+
+#  1,000,000,000

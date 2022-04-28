@@ -17,6 +17,8 @@ class Wallet(BaseModelMixin):
     private_key = models.CharField(_('개인키'), max_length=64, null=False)
     passphrase = models.CharField(_('암호'), max_length=255, null=True, default=None, blank=True)
 
+    active = models.BooleanField(_('활성상태'), default=False)
+
     class Meta:
         verbose_name = _('지갑')
         verbose_name_plural = _('지갑')

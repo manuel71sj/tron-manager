@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'tron',
     'wallet',
     'transaction',
+    'contract'
 ]
 
 MIDDLEWARE = [
@@ -94,6 +95,10 @@ AUTH_USER_MODEL = 'user.User'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
@@ -303,3 +308,5 @@ CELERY_TASK_ROUTES = {
 CELERY_TASK_ANNOTATIONS = {
     'tron.tasks.add': {'rate_limit': '10/m'},
 }
+
+TRON_NETWORK = config.TRON['network']

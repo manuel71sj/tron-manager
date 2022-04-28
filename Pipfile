@@ -19,6 +19,8 @@ celery = "*"
 redis = "*"
 django-celery-beat = "*"
 flower = "*"
+mnemonic = "*"
+bip32 = "*"
 
 [dev-packages]
 

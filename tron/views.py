@@ -4,24 +4,28 @@ import logging
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.decorators import api_view, permission_classes, renderer_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.decorators import api_view, permission_classes, renderer_classes, authentication_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from tronpy import Tron
 from tronpy.keys import PrivateKey
 
+from boot.config import TRON
 from boot.exceptions import BusinessError
 from boot.renderers import CustomRenderer
+from contract.models import Contract
+from contract.serializers import ContractSerializer
 from framework.module.common import is_url
 from transaction.models import Transaction
 from transaction.serializers import TransactionSerializer
-from tron.module import compile_nft
+from tron.module import compile_nft, get_contract
 from tron.serializers import TronCreateSerializer, TronMintSerializer
 from wallet.models import Wallet
 
 logger = logging.getLogger(__name__)
 
-tron = Tron(network='shasta')
+tron = Tron(network=TRON['network'])
 
 
 @swagger_auto_schema(method='post', request_body=TronCreateSerializer, )
@@ -59,8 +63,14 @@ def contract_create(request):
         '''
 
         transaction = Transaction.crate_contract(txn.txid, result, request.user)
+        contract = Contract.create_nft_contract(transaction, wallet, request.user,
+                                                get_contract(transaction.contract_address),
+                                                serializer.data['symbol'])
 
-        return Response(TransactionSerializer(transaction).data)
+        return Response({
+            'transaction': TransactionSerializer(transaction).data,
+            'contract': ContractSerializer(contract).data,
+        })
     except Exception as e:
         logger.exception(e)
         raise BusinessError(e)
@@ -130,6 +140,8 @@ def mint_nft(request):
         trx = mint.with_owner(address).fee_limit(10 ** 9).build().sign(private_key)
         result = trx.broadcast().wait()
 
+        # TODO : make celery job
+
         return Response({'contract': contract.name, 'symbol': contract.functions.symbol(), 'result': result})
     except Exception as e:
         logger.exception(e)
@@ -143,4 +155,18 @@ getNowBlock과의 차이를 카운트 하여 19 이상이면 confirm된 트랜�
 
 getTransactionById의 contractRet는 evm메세지 일뿐 최종 확인은 컨펌 수로 확인해야 함
 
+대량 mint test
+fee limit 150
+
 '''
+
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def example_view(request, format=None):
+    content = {
+        'user': str(request.user),  # `django.contrib.auth.User` instance.
+        'auth': str(request.auth),  # None
+    }
+    return Response(content)

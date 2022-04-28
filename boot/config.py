@@ -19,3 +19,7 @@ for (k, v) in config.items('MongoDB'):
 MARIADB = dict()
 for (k, v) in config.items('MariaDB'):
     MARIADB[k] = v
+
+TRON = dict()
+for (k, v) in config.items('TRON'):
+    TRON[k] = v

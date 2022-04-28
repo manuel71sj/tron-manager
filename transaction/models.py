@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
 from framework.module.BaseMixin import BaseModelMixin
 from framework.module.choices import ResultChoices, ConfirmedChoices, TxTypeChoices
 from framework.user.models import User
+
+
+# Create your models here.
 
 
 class Transaction(BaseModelMixin):
@@ -27,6 +29,9 @@ class Transaction(BaseModelMixin):
         verbose_name = _('트랜잭션')
         verbose_name_plural = _('트랜잭션')
 
+    def __str__(self):
+        return self.tx_id
+
     @classmethod
     def crate_contract(cls, tx_id: str, result: dict, user: User):
         save = cls(
@@ -36,6 +41,25 @@ class Transaction(BaseModelMixin):
             tx_type=TxTypeChoices.CREATE_CONTRACT,
             json_result=result,
             contract_address=result['contract_address']
+        )
+
+        save.save()
+
+        return save
+
+    @classmethod
+    def create_send_transaction(cls, tx_id: str, result: dict, user: User = None):
+        if 'ret' in result:
+            ret = result['ret'][0]['contractRet']
+        else:
+            ret = ResultChoices.PENDING
+
+        save = cls(
+            tx_id=tx_id,
+            result=ret,
+            user=user,
+            tx_type=TxTypeChoices.SEND_TRX,
+            json_result=result,
         )
 
         save.save()
