@@ -102,3 +102,11 @@ def send_trx(from_address: str, to_address: str, amount: float, memo: str, mnemo
         'result': result,
         'transaction': TransactionSerializer(transaction).data
     }
+
+
+@app.task
+def mass_mint(contract_address: str, owner_address: str):
+    contract = tron.get_contract(contract_address)
+
+    if (contract.functions.is_minter(owner_address)):
+        pass

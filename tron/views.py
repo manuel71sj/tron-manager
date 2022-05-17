@@ -21,6 +21,7 @@ from transaction.models import Transaction
 from transaction.serializers import TransactionSerializer
 from tron.module import compile_nft, get_contract
 from tron.serializers import TronCreateSerializer, TronMintSerializer
+from tron.utils import mnemonic_to_address
 from wallet.models import Wallet
 
 logger = logging.getLogger(__name__)
@@ -165,8 +166,11 @@ fee limit 150
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def example_view(request, format=None):
+    address = mnemonic_to_address('scout engage kick economy gravity vast impulse nation resemble symptom exist fold')
     content = {
         'user': str(request.user),  # `django.contrib.auth.User` instance.
         'auth': str(request.auth),  # None
+        'address': address
     }
+
     return Response(content)

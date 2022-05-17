@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-21 16:44+0900\n"
+"POT-Creation-Date: 2022-05-16 17:15+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: boot/settings.py:179
+#: boot/exceptions.py:8
+msgid "Business Error."
+msgstr ""
+
+#: boot/settings.py:189
 msgid "Korean"
 msgstr ""
 
-#: boot/settings.py:180
+#: boot/settings.py:190
 msgid "Japanese"
 msgstr ""
 
-#: boot/settings.py:181
+#: boot/settings.py:191
 msgid "English"
+msgstr ""
+
+#: contract/models.py:16 transaction/models.py:29 transaction/models.py:30
+msgid "트랜잭션"
+msgstr ""
+
+#: contract/models.py:17 framework/user/models.py:113 transaction/models.py:20
+#: wallet/models.py:14
+msgid "user"
+msgstr ""
+
+#: contract/models.py:18 wallet/models.py:23 wallet/models.py:24
+msgid "지갑"
+msgstr ""
+
+#: contract/models.py:20 transaction/models.py:26
+msgid "컨트랙트 주소"
+msgstr ""
+
+#: contract/models.py:21
+msgid "TRC 타입"
+msgstr ""
+
+#: contract/models.py:24
+msgid "토큰이름"
+msgstr ""
+
+#: contract/models.py:25
+msgid "토큰심볼"
+msgstr ""
+
+#: contract/models.py:27
+msgid "컨트랙트JSON"
+msgstr ""
+
+#: contract/models.py:30 contract/models.py:31
+msgid "컨트랙트"
 msgstr ""
 
 #: framework/module/BaseMixin.py:7
@@ -40,6 +81,46 @@ msgstr ""
 
 #: framework/module/BaseMixin.py:10
 msgid "updated"
+msgstr ""
+
+#: framework/module/choices.py:6
+msgid "성공"
+msgstr ""
+
+#: framework/module/choices.py:7
+msgid "실패"
+msgstr ""
+
+#: framework/module/choices.py:8
+msgid "대기"
+msgstr ""
+
+#: framework/module/choices.py:12
+msgid "컨펌됨"
+msgstr ""
+
+#: framework/module/choices.py:13
+msgid "컨펌대기중"
+msgstr ""
+
+#: framework/module/choices.py:17
+msgid "스마트컨트랙트 생성"
+msgstr ""
+
+#: framework/module/choices.py:18
+msgid "TRX 전송"
+msgstr ""
+
+#: framework/module/choices.py:22
+msgid "TRC10"
+msgstr ""
+
+#: framework/module/choices.py:23
+msgid "TRC20"
+msgstr ""
+
+#: framework/module/choices.py:24
+msgid "TRC721"
 msgstr ""
 
 #: framework/user/admin.py:40
@@ -133,12 +214,59 @@ msgstr ""
 msgid "date joined"
 msgstr ""
 
-#: framework/user/models.py:113 wallet/models.py:14
-msgid "user"
-msgstr ""
-
 #: framework/user/models.py:114
 msgid "users"
+msgstr ""
+
+#: transaction/models.py:14
+msgid "트랜잭션ID"
+msgstr ""
+
+#: transaction/models.py:15
+msgid "결과"
+msgstr ""
+
+#: transaction/models.py:16
+msgid "트랜잭션 결과값"
+msgstr ""
+
+#: transaction/models.py:17
+msgid "상태"
+msgstr ""
+
+#: transaction/models.py:18
+msgid "컨펌상태에 의한 결과값 ( > 20 일 경우 True"
+msgstr ""
+
+#: transaction/models.py:22
+msgid "거래구분"
+msgstr ""
+
+#: transaction/models.py:24
+msgid "결과JSON"
+msgstr ""
+
+#: transaction/tasks.py:76
+#, python-format
+msgid "%s (id: %s)는 활성화 되었습니다"
+msgstr ""
+
+#: transaction/tasks.py:78
+#, python-format
+msgid "%s (id: %s)는 비활성 상태입니다"
+msgstr ""
+
+#: tron/utils.py:54
+#, python-format
+msgid "계정 %s 대역폭: 사용: %s, 최대: %s, 사용율: %s"
+msgstr ""
+
+#: tron/utils.py:60
+msgid "계정 %s의 사용중인 대역폭이 90%를 초과 하였습니다. 20분간 대기 합니다."
+msgstr ""
+
+#: tron/views.py:50 tron/views.py:119
+msgid "PrivateKey address mismatch"
 msgstr ""
 
 #: wallet/models.py:16
@@ -149,6 +277,10 @@ msgstr ""
 msgid "개인키"
 msgstr ""
 
-#: wallet/models.py:20 wallet/models.py:21
-msgid "지갑"
+#: wallet/models.py:18
+msgid "암호"
+msgstr ""
+
+#: wallet/models.py:20
+msgid "활성상태"
 msgstr ""
