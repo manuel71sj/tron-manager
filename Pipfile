@@ -21,6 +21,8 @@ django-celery-beat = "*"
 flower = "*"
 mnemonic = "*"
 bip32 = "*"
+black = "*"
+pre-commit = "*"
 
 [dev-packages]
 
