@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wallet', '0004_alter_wallet_passphrase'),
+        ("wallet", "0004_alter_wallet_passphrase"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='wallet',
-            name='active',
-            field=models.BooleanField(default=False, verbose_name='활성상태'),
+            model_name="wallet",
+            name="active",
+            field=models.BooleanField(default=False, verbose_name="활성상태"),
         ),
     ]

@@ -7,7 +7,7 @@ from wallet.models import Wallet
 class WalletSerializer(BaseModelSerializerMixin):
     class Meta:
         model = Wallet
-        exclude = ('deleted',)
+        exclude = ("deleted",)
 
 
 class WalletCreateSerializer(serializers.Serializer):

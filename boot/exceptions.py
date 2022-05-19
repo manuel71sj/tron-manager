@@ -5,8 +5,8 @@ from rest_framework.exceptions import APIException, _get_error_details
 
 class BusinessError(APIException):
     status_code = status.HTTP_200_OK
-    default_detail = _('Business Error.')
-    default_code = 'business_error'
+    default_detail = _("Business Error.")
+    default_code = "business_error"
 
     def __init__(self, detail=None, code=None):
         if detail is None:

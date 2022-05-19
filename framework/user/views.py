@@ -17,11 +17,11 @@ def index(request):
     except Exception as e:
         logger.exception(e)
 
-    return JsonResponse({'result': True})
+    return JsonResponse({"result": True})
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.all().order_by("-date_joined")
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 

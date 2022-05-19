@@ -1,7 +1,12 @@
 from django.apps import apps
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+
 # Create your models here.
-from django.contrib.auth.models import _user_has_perm, PermissionsMixin, _user_has_module_perms
+from django.contrib.auth.models import (
+    _user_has_perm,
+    PermissionsMixin,
+    _user_has_module_perms,
+)
 from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
@@ -11,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 class UserManager(BaseUserManager):
     def _create_user(self, email, name, password, **extra_fields):
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
 
         if not name:
             raise ValueError("Users must have an name")
@@ -22,9 +27,7 @@ class UserManager(BaseUserManager):
         username = global_user_model.normalize_username(name)
 
         user = self.model(
-            email=self.normalize_email(email),
-            name=username,
-            **extra_fields
+            email=self.normalize_email(email), name=username, **extra_fields
         )
 
         user.set_password(password)
@@ -32,43 +35,43 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email, name, password, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_admin', False)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_admin", False)
+        extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, name, password, **extra_fields)
 
     def create_staff(self, email, name, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_admin', False)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_admin", False)
+        extra_fields.setdefault("is_superuser", False)
 
-        if extra_fields.get('is_staff') is not True:
+        if extra_fields.get("is_staff") is not True:
             raise ValueError("Staff must have is_staff=True.")
 
         return self._create_user(email, name, password, **extra_fields)
 
     def create_admin(self, email, name, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_admin', True)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_admin", True)
+        extra_fields.setdefault("is_superuser", False)
 
-        if extra_fields.get('is_staff') is not True:
+        if extra_fields.get("is_staff") is not True:
             raise ValueError("Admin must have is_staff=True.")
-        if extra_fields.get('is_admin') is not True:
+        if extra_fields.get("is_admin") is not True:
             raise ValueError("Admin must have is_admin=True.")
 
         return self._create_user(email, name, password, **extra_fields)
 
     def create_superuser(self, email, name, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_admin', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_admin", True)
+        extra_fields.setdefault("is_superuser", True)
 
-        if extra_fields.get('is_staff') is not True:
+        if extra_fields.get("is_staff") is not True:
             raise ValueError("Admin must have is_staff=True.")
-        if extra_fields.get('is_admin') is not True:
+        if extra_fields.get("is_admin") is not True:
             raise ValueError("Admin must have is_admin=True.")
-        if extra_fields.get('is_superuser') is not True:
+        if extra_fields.get("is_superuser") is not True:
             raise ValueError("Admin must have is_superuser=True.")
 
         return self._create_user(email, name, password, **extra_fields)
@@ -78,7 +81,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     # _id = ObjectIdField()
 
     email = models.EmailField(
-        _("email address"), max_length=255, unique=True,
+        _("email address"),
+        max_length=255,
+        unique=True,
         error_messages={
             "unique": _("A user with that username already exists."),
         },
@@ -104,8 +109,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["name"]
 
     objects = UserManager()
 
@@ -114,10 +119,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _("users")
 
     def __str__(self):
-        return '%s' % (self.email,)
+        return "%s" % (self.email,)
 
     def get_full_name(self):
-        return '%s (%s)' % (self.name, self.email)
+        return "%s (%s)" % (self.name, self.email)
 
     def get_short_name(self):
         return self.name

@@ -18,22 +18,26 @@ logger = logging.getLogger(__name__)
 
 
 class WalletViewSet(viewsets.ModelViewSet):
-    queryset = Wallet.objects.all().order_by('-created_at')
+    queryset = Wallet.objects.all().order_by("-created_at")
     serializer_class = WalletSerializer
     renderer_classes = [CustomRenderer]
 
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Wallet.objects.filter(user=self.request.user, deleted=False).order_by('-created_at')
+        return Wallet.objects.filter(user=self.request.user, deleted=False).order_by(
+            "-created_at"
+        )
 
     def perform_destroy(self, instance):
         instance.deleted = True
         instance.save()
 
 
-@swagger_auto_schema(method='post', request_body=WalletCreateSerializer, deprecated=True)
-@api_view(['POST'])
+@swagger_auto_schema(
+    method="post", request_body=WalletCreateSerializer, deprecated=True
+)
+@api_view(["POST"])
 @renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
 def create_wallet(request):
@@ -46,27 +50,32 @@ def create_wallet(request):
     serializer = WalletCreateSerializer(data=request.data)
 
     if not serializer.is_valid():
-        return JsonResponse({'result': 'FAILED', 'msg': 'validation failed'})
+        return JsonResponse({"result": "FAILED", "msg": "validation failed"})
 
-    result = generate_wallet(serializer.data['passphrase'])
+    result = generate_wallet(serializer.data["passphrase"])
 
     wallet = Wallet.objects.create(
         user=request.user,
-        address=result['base58check_address'],
-        private_key=result['private_key'],
-        passphrase=result['passphrase']
+        address=result["base58check_address"],
+        private_key=result["private_key"],
+        passphrase=result["passphrase"],
     )
 
-    return JsonResponse({'result': 'SUCCESS', 'data': {
-        'wallet_id': wallet.id,
-        'address': result['base58check_address'],
-        'private_key': result['private_key'],
-        'passphrase': result['passphrase']
-    }})
+    return JsonResponse(
+        {
+            "result": "SUCCESS",
+            "data": {
+                "wallet_id": wallet.id,
+                "address": result["base58check_address"],
+                "private_key": result["private_key"],
+                "passphrase": result["passphrase"],
+            },
+        }
+    )
 
 
-@swagger_auto_schema(method='get')
-@api_view(['GET'])
+@swagger_auto_schema(method="get")
+@api_view(["GET"])
 @renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
 def create_wallet_with_passphrase(request):
@@ -78,18 +87,18 @@ def create_wallet_with_passphrase(request):
 
     wallet = Wallet.objects.create(
         user=request.user,
-        address=result['address'],
-        private_key=result['private_key'],
-        passphrase=result['passphrase']
+        address=result["address"],
+        private_key=result["private_key"],
+        passphrase=result["passphrase"],
     )
 
-    result['wallet_id'] = wallet.id
+    result["wallet_id"] = wallet.id
 
     return Response(result)
 
 
-@swagger_auto_schema(method='get')
-@api_view(['GET'])
+@swagger_auto_schema(method="get")
+@api_view(["GET"])
 @renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
 def use_wallet(request, pk):
@@ -108,29 +117,28 @@ def use_wallet(request, pk):
 
     if wallet.count() <= 0:
         try:
-            del request.session['w-k']
+            del request.session["w-k"]
         except KeyError:
             pass
 
-        raise BusinessError('FAILED')
+        raise BusinessError("FAILED")
 
-    request.session['w-k'] = wallet[0].id
-    return Response({
-        'key_id ': wallet[0].id
-    })
+    request.session["w-k"] = wallet[0].id
+    return Response({"key_id ": wallet[0].id})
 
 
-@swagger_auto_schema(method='get')
-@api_view(['GET'])
+@swagger_auto_schema(method="get")
+@api_view(["GET"])
 @renderer_classes([CustomRenderer])
 @permission_classes([IsAuthenticated])
 def test_session(request):
     print(request.session.__dict__)
 
     try:
-        return Response(request.session['w-k'])
+        return Response(request.session["w-k"])
     except Exception as e:
         logger.exception(e)
         raise BusinessError(e)
+
 
 #  1,000,000,000

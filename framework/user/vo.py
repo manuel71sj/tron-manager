@@ -1,5 +1,4 @@
 class WalletVo:
-
     def __init__(self, address, passphrase):
         self.passphrase = passphrase
         for key in address:

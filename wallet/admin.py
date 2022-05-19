@@ -8,4 +8,4 @@ from wallet.models import Wallet
 class WalletAdmin(admin.ModelAdmin):
     model = Wallet
 
-    list_display = ('id', 'user', 'address', 'active')
+    list_display = ("id", "user", "address", "active")

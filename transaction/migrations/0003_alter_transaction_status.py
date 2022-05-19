@@ -6,13 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('transaction', '0002_transaction_contract_address_transaction_json_result_and_more'),
+        (
+            "transaction",
+            "0002_transaction_contract_address_transaction_json_result_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='transaction',
-            name='status',
-            field=models.CharField(choices=[('CONFIRMED', '컨펌됨'), ('UNCONFIRMED', '컨펌대기중')], default='UNCONFIRMED', help_text='컨펌상태에 의한 결과값 ( > 20 일 경우 True', max_length=11, verbose_name='상태'),
+            model_name="transaction",
+            name="status",
+            field=models.CharField(
+                choices=[("CONFIRMED", "컨펌됨"), ("UNCONFIRMED", "컨펌대기중")],
+                default="UNCONFIRMED",
+                help_text="컨펌상태에 의한 결과값 ( > 20 일 경우 True",
+                max_length=11,
+                verbose_name="상태",
+            ),
         ),
     ]

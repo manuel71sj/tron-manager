@@ -75,6 +75,7 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     disabled password hash display field.
     """
+
     password = ReadOnlyPasswordHashField(
         label=_("Password"),
         help_text=_(

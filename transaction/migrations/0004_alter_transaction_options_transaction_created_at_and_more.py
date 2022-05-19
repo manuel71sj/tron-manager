@@ -7,28 +7,32 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('transaction', '0003_alter_transaction_status'),
+        ("transaction", "0003_alter_transaction_status"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='transaction',
-            options={'verbose_name': '트랜잭션', 'verbose_name_plural': '트랜잭션'},
+            name="transaction",
+            options={"verbose_name": "트랜잭션", "verbose_name_plural": "트랜잭션"},
         ),
         migrations.AddField(
-            model_name='transaction',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now, verbose_name='created'),
+            model_name="transaction",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True,
+                default=django.utils.timezone.now,
+                verbose_name="created",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='transaction',
-            name='deleted',
-            field=models.BooleanField(default=False, verbose_name='is_deleted'),
+            model_name="transaction",
+            name="deleted",
+            field=models.BooleanField(default=False, verbose_name="is_deleted"),
         ),
         migrations.AddField(
-            model_name='transaction',
-            name='updated_at',
-            field=models.DateTimeField(auto_now=True, verbose_name='updated'),
+            model_name="transaction",
+            name="updated_at",
+            field=models.DateTimeField(auto_now=True, verbose_name="updated"),
         ),
     ]

@@ -9,23 +9,31 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('transaction', '0001_initial'),
+        ("transaction", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='transaction',
-            name='contract_address',
-            field=models.CharField(blank=True, max_length=34, null=True, verbose_name='컨트랙트 주소'),
+            model_name="transaction",
+            name="contract_address",
+            field=models.CharField(
+                blank=True, max_length=34, null=True, verbose_name="컨트랙트 주소"
+            ),
         ),
         migrations.AddField(
-            model_name='transaction',
-            name='json_result',
-            field=models.JSONField(blank=True, null=True, verbose_name='결과JSON'),
+            model_name="transaction",
+            name="json_result",
+            field=models.JSONField(blank=True, null=True, verbose_name="결과JSON"),
         ),
         migrations.AlterField(
-            model_name='transaction',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='user'),
+            model_name="transaction",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="user",
+            ),
         ),
     ]

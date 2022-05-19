@@ -12,7 +12,7 @@ from boot.config import TRON
 
 logger = logging.getLogger(__name__)
 
-tron = Tron(network=TRON['network'])
+tron = Tron(network=TRON["network"])
 
 
 def mnemonic_to_private_key(mnemonic: str) -> PrivateKey:
@@ -43,19 +43,21 @@ def from_sun(amount: int) -> float:
 def get_bandwidth_status(address: str):
     resource = tron.get_account_resource(address)
 
-    total = resource.get('freeNetLimit')
-    used = resource.get('freeNetUsed')
+    total = resource.get("freeNetLimit")
+    used = resource.get("freeNetUsed")
 
     if used is None:
         used = 0
 
     percent = math.floor((used / total) * 100)
 
-    logger.info(_('계정 %s 대역폭: 사용: %s, 최대: %s, 사용율: %s') % (address, used, total, percent))
+    logger.info(
+        _("계정 %s 대역폭: 사용: %s, 최대: %s, 사용율: %s") % (address, used, total, percent)
+    )
     return percent
 
 
 def securing_bandwidth(address: str):
     while get_bandwidth_status(address) > 90:
-        logger.info(_('계정 %s의 사용중인 대역폭이 90%를 초과 하였습니다. 20분간 대기 합니다.') % address)
+        logger.info(_("계정 %s의 사용중인 대역폭이 90%를 초과 하였습니다. 20분간 대기 합니다.") % address)
         sleep(1 * 60 * 20)

@@ -11,17 +11,21 @@ from framework.user.models import User
 class Wallet(BaseModelMixin):
     # _id = ObjectIdField()
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, verbose_name=_("user"))
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=False, verbose_name=_("user")
+    )
 
-    address = models.CharField(_('지갑주소'), max_length=34, null=False)
-    private_key = models.CharField(_('개인키'), max_length=64, null=False)
-    passphrase = models.CharField(_('암호'), max_length=255, null=True, default=None, blank=True)
+    address = models.CharField(_("지갑주소"), max_length=34, null=False)
+    private_key = models.CharField(_("개인키"), max_length=64, null=False)
+    passphrase = models.CharField(
+        _("암호"), max_length=255, null=True, default=None, blank=True
+    )
 
-    active = models.BooleanField(_('활성상태'), default=False)
+    active = models.BooleanField(_("활성상태"), default=False)
 
     class Meta:
-        verbose_name = _('지갑')
-        verbose_name_plural = _('지갑')
+        verbose_name = _("지갑")
+        verbose_name_plural = _("지갑")
 
     def __str__(self):
-        return '%s(%s)' % (self.user.email, self.address)
+        return "%s(%s)" % (self.user.email, self.address)

@@ -6,13 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('transaction', '0004_alter_transaction_options_transaction_created_at_and_more'),
+        (
+            "transaction",
+            "0004_alter_transaction_options_transaction_created_at_and_more",
+        ),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='transaction',
-            name='tx_type',
-            field=models.CharField(choices=[('CREATE_SMART_CONTRACT', '스마트컨트랙트 생성')], default='CREATE_SMART_CONTRACT', max_length=21, verbose_name='거래구분'),
+            model_name="transaction",
+            name="tx_type",
+            field=models.CharField(
+                choices=[("CREATE_SMART_CONTRACT", "스마트컨트랙트 생성")],
+                default="CREATE_SMART_CONTRACT",
+                max_length=21,
+                verbose_name="거래구분",
+            ),
         ),
     ]

@@ -10,31 +10,95 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('wallet', '0004_alter_wallet_passphrase'),
+        ("wallet", "0004_alter_wallet_passphrase"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('transaction', '0005_transaction_tx_type'),
+        ("transaction", "0005_transaction_tx_type"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Contract',
+            name="Contract",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('deleted', models.BooleanField(default=False, verbose_name='is_deleted')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated')),
-                ('contract_address', models.CharField(blank=True, max_length=34, null=True, verbose_name='컨트랙트 주소')),
-                ('trc_type', models.CharField(choices=[('TRC10', 'TRC10'), ('TRC20', 'TRC20'), ('TRC721', 'TRC721')], default='TRC721', max_length=6, verbose_name='TRC 타입')),
-                ('name', models.CharField(max_length=100, verbose_name='토큰이름')),
-                ('symbol', models.CharField(max_length=10, verbose_name='토큰심볼')),
-                ('json_contract', models.JSONField(blank=True, null=True, verbose_name='컨트랙트JSON')),
-                ('tx', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='transaction.transaction', verbose_name='트랜잭션')),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='user')),
-                ('wallet', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='wallet.wallet', verbose_name='지갑')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "deleted",
+                    models.BooleanField(default=False, verbose_name="is_deleted"),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(auto_now_add=True, verbose_name="created"),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, verbose_name="updated"),
+                ),
+                (
+                    "contract_address",
+                    models.CharField(
+                        blank=True, max_length=34, null=True, verbose_name="컨트랙트 주소"
+                    ),
+                ),
+                (
+                    "trc_type",
+                    models.CharField(
+                        choices=[
+                            ("TRC10", "TRC10"),
+                            ("TRC20", "TRC20"),
+                            ("TRC721", "TRC721"),
+                        ],
+                        default="TRC721",
+                        max_length=6,
+                        verbose_name="TRC 타입",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="토큰이름")),
+                ("symbol", models.CharField(max_length=10, verbose_name="토큰심볼")),
+                (
+                    "json_contract",
+                    models.JSONField(blank=True, null=True, verbose_name="컨트랙트JSON"),
+                ),
+                (
+                    "tx",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="transaction.transaction",
+                        verbose_name="트랜잭션",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="user",
+                    ),
+                ),
+                (
+                    "wallet",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="wallet.wallet",
+                        verbose_name="지갑",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': '컨트랙트',
-                'verbose_name_plural': '컨트랙트',
+                "verbose_name": "컨트랙트",
+                "verbose_name_plural": "컨트랙트",
             },
         ),
     ]

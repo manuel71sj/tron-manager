@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 
 class BaseModelMixin(models.Model):
-    deleted = models.BooleanField(_('is_deleted'), default=False)
+    deleted = models.BooleanField(_("is_deleted"), default=False)
 
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated"), auto_now=True)

@@ -14,7 +14,11 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _, gettext
 from django.views.decorators.debug import sensitive_post_parameters
 
-from framework.user.forms import UserChangeForm, AdminPasswordChangeForm, UserCreationForm
+from framework.user.forms import (
+    UserChangeForm,
+    AdminPasswordChangeForm,
+    UserCreationForm,
+)
 from framework.user.models import User
 
 # Register your models here.
@@ -33,10 +37,26 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'name', 'is_staff', 'is_admin', 'is_superuser', 'is_active', 'date_joined')
-    list_filter = ('is_admin',)
+    list_display = (
+        "email",
+        "name",
+        "is_staff",
+        "is_admin",
+        "is_superuser",
+        "is_active",
+        "date_joined",
+    )
+    list_filter = ("is_admin",)
     fieldsets = (
-        (None, {'fields': ('email', 'password',)}),
+        (
+            None,
+            {
+                "fields": (
+                    "email",
+                    "password",
+                )
+            },
+        ),
         (_("Personal info"), {"fields": ("name",)}),
         (
             _("Permissions"),
@@ -55,13 +75,16 @@ class UserAdmin(BaseUserAdmin):
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'name', 'password1', 'password2'),
-        }),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "name", "password1", "password2"),
+            },
+        ),
     )
-    search_fields = ('email',)
-    ordering = ('-date_joined',)
+    search_fields = ("email",)
+    ordering = ("-date_joined",)
     filter_horizontal = ("user_permissions",)
 
     @sensitive_post_parameters_m
