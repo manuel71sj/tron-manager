@@ -25,88 +25,88 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3w&ouf$-3br&e==gz8+b0i3l^4_k#4zt0%ksyrnodc*01i&^(7'
+SECRET_KEY = "django-insecure-3w&ouf$-3br&e==gz8+b0i3l^4_k#4zt0%ksyrnodc*01i&^(7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = eval(config.DEFAULT['debug'])
-LOG_LEVEL = os.getenv('DJANGO_LOG_LEVEL', config.DEFAULT['log_level']).upper()
+DEBUG = eval(config.DEFAULT["debug"])
+LOG_LEVEL = os.getenv("DJANGO_LOG_LEVEL", config.DEFAULT["log_level"]).upper()
 
-ALLOWED_HOSTS = str(config.DEFAULT['allowed_hosts']).split(',')
+ALLOWED_HOSTS = str(config.DEFAULT["allowed_hosts"]).split(",")
 HOSTNAME = ALLOWED_HOSTS[0]
 SERVER_TYPE = config.SERVER_TYPE
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'drf_yasg',
-    'rest_framework',
-    'django_extensions',
-    'django_celery_beat',
-    'framework.user',
-    'tron',
-    'wallet',
-    'transaction',
-    'contract'
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "drf_yasg",
+    "rest_framework",
+    "django_extensions",
+    "django_celery_beat",
+    "framework.user",
+    "tron",
+    "wallet",
+    "transaction",
+    "contract",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'boot.middleware.RequestLogMiddleware'
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "boot.middleware.RequestLogMiddleware",
 ]
 
-ROOT_URLCONF = 'boot.urls'
+ROOT_URLCONF = "boot.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'framework/templates',
-            BASE_DIR / 'tron/templates',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            BASE_DIR / "framework/templates",
+            BASE_DIR / "tron/templates",
         ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'boot.wsgi.application'
+WSGI_APPLICATION = "boot.wsgi.application"
 
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = "user.User"
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
-    'EXCEPTION_HANDLER': 'boot.handler.api_exception_handler',
-    'DEFAULT_RENDERER_CLASSES': [
-        'boot.renderers.CustomRenderer',
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "EXCEPTION_HANDLER": "boot.handler.api_exception_handler",
+    "DEFAULT_RENDERER_CLASSES": [
+        "boot.renderers.CustomRenderer",
     ],
 }
 
@@ -137,20 +137,20 @@ REST_FRAMEWORK = {
 # }
 
 
-MARIADB_HOST = config.MARIADB.get('host')
-MARIADB_PORT = int(config.MARIADB.get('port'))
-MARIADB_USER = config.MARIADB.get('user')
-MARIADB_PASSWORD = config.MARIADB.get('password')
-MARIADB_NAME = config.MARIADB.get('database')
+MARIADB_HOST = config.MARIADB.get("host")
+MARIADB_PORT = int(config.MARIADB.get("port"))
+MARIADB_USER = config.MARIADB.get("user")
+MARIADB_PASSWORD = config.MARIADB.get("password")
+MARIADB_NAME = config.MARIADB.get("database")
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': MARIADB_NAME,
-        'USER': MARIADB_USER,
-        'PASSWORD': MARIADB_PASSWORD,
-        'HOST': MARIADB_HOST,
-        'PORT': MARIADB_PORT,
-        'AUTOCOMMIT': 'True'
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": MARIADB_NAME,
+        "USER": MARIADB_USER,
+        "PASSWORD": MARIADB_PASSWORD,
+        "HOST": MARIADB_HOST,
+        "PORT": MARIADB_PORT,
+        "AUTOCOMMIT": "True",
     }
 }
 
@@ -159,25 +159,25 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = config.DEFAULT['lang']
+LANGUAGE_CODE = config.DEFAULT["lang"]
 
-TIME_ZONE = config.DEFAULT['time_zone']
+TIME_ZONE = config.DEFAULT["time_zone"]
 
 USE_I18N = True
 USE_L10N = True
@@ -186,127 +186,132 @@ USE_TZ = True
 from django.utils.translation import gettext_lazy as _
 
 LANGUAGES = [
-    ('ko', _('Korean')),
-    ('ja', _('Japanese')),
-    ('en', _('English')),
+    ("ko", _("Korean")),
+    ("ja", _("Japanese")),
+    ("en", _("English")),
 ]
 
-LOCALE_PATHS = [BASE_DIR / 'locale', ]
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGGING_CONFIG = None
-LOG_FILE = 'logs/%s-%s.log' % (HOSTNAME, SERVER_TYPE)
-LOG_FILE_SERVER = 'logs/%s-%s_server.log' % (HOSTNAME, SERVER_TYPE)
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-
-    'formatters': {
-        'default': {
-            # exact format is not important, this is the minimum information
-            'format': '[%(levelname)-8s] %(asctime)s %(thread)-10s %(name)-12s | %(message)s',
+LOG_FILE = "logs/%s-%s.log" % (HOSTNAME, SERVER_TYPE)
+LOG_FILE_SERVER = "logs/%s-%s_server.log" % (HOSTNAME, SERVER_TYPE)
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "default": {
+                # exact format is not important, this is the minimum information
+                "format": "[%(levelname)-8s] %(asctime)s %(thread)-10s %(name)-12s | %(message)s",
+            },
+            "django.server": DEFAULT_LOGGING["formatters"]["django.server"],
+            "user_log": {
+                # exact format is not important, this is the minimum information
+                "format": "[%(levelname)-8s] %(asctime)s %(thread)-10s | %(message)s",
+            },
         },
-        'django.server': DEFAULT_LOGGING['formatters']['django.server'],
-        'user_log': {
-            # exact format is not important, this is the minimum information
-            'format': '[%(levelname)-8s] %(asctime)s %(thread)-10s | %(message)s',
+        "handlers": {
+            # console logs to stderr
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "default",
+            },
+            "django.server": DEFAULT_LOGGING["handlers"]["django.server"],
+            "file": {
+                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "default",
+                "filename": BASE_DIR / LOG_FILE,
+                "maxBytes": 1024 * 1024 * 15,  # 15MB
+                "backupCount": 10,
+            },
+            "file.server": {
+                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "default",
+                "filename": BASE_DIR / LOG_FILE_SERVER,
+                "maxBytes": 1024 * 1024 * 15,  # 15MB
+                "backupCount": 10,
+            },
+            "console_userlog": {
+                "class": "logging.StreamHandler",
+                "formatter": "user_log",
+            },
         },
-    },
-    'handlers': {
-        # console logs to stderr
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
+        "loggers": {
+            # Our application code
+            "boot.settings": {
+                "level": LOG_LEVEL,
+                "handlers": ["console"],
+                # Avoid double logging because of root logger
+                "propagate": False,
+            },
+            # Default runserver request logging
+            "root": {
+                "level": LOG_LEVEL,
+                "handlers": ["console_userlog"],
+                "propagate": False,
+            },
+            # 'django.server': DEFAULT_LOGGING['loggers']['django.server'],
+            "django.utils.autoreload": {
+                "level": "ERROR",
+                "handlers": ["console"],
+                "propagate": False,
+            },
+            # 'djongo': {
+            #     'level': 'INFO',
+            #     'handlers': ['console'],
+            #     'propagate': False,
+            # },
+            "django.server": {
+                "level": "INFO",
+                "handlers": ["console", "file.server"],
+                "propagate": False,
+            },
+            # default for all undefined Python modules
+            "": {
+                "level": LOG_LEVEL,
+                "handlers": ["console", "file"],
+                "propagate": False,
+            },
         },
-        'django.server': DEFAULT_LOGGING['handlers']['django.server'],
-        'file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'default',
-            'filename': BASE_DIR / LOG_FILE,
-            'maxBytes': 1024 * 1024 * 15,  # 15MB
-            'backupCount': 10,
-        },
-        'file.server': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'default',
-            'filename': BASE_DIR / LOG_FILE_SERVER,
-            'maxBytes': 1024 * 1024 * 15,  # 15MB
-            'backupCount': 10,
-        },
-        'console_userlog': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'user_log',
-        },
-    },
-    'loggers': {
-        # Our application code
-        'boot.settings': {
-            'level': LOG_LEVEL,
-            'handlers': ['console'],
-            # Avoid double logging because of root logger
-            'propagate': False,
-        },
-        # Default runserver request logging
-        'root': {
-            'level': LOG_LEVEL,
-            'handlers': ['console_userlog'],
-            'propagate': False,
-        },
-        # 'django.server': DEFAULT_LOGGING['loggers']['django.server'],
-        'django.utils.autoreload': {
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        # 'djongo': {
-        #     'level': 'INFO',
-        #     'handlers': ['console'],
-        #     'propagate': False,
-        # },
-        'django.server': {
-            'level': 'INFO',
-            'handlers': ['console', 'file.server'],
-            'propagate': False,
-        },
-        # default for all undefined Python modules
-        '': {
-            'level': LOG_LEVEL,
-            'handlers': ['console', 'file'],
-            'propagate': False,
-        },
-    },
-})
+    }
+)
 
 log = logger.getLogger(__name__)
-log.info('BASE_DIR: %s' % BASE_DIR)
+log.info("BASE_DIR: %s" % BASE_DIR)
 
-CELERY_BROKER_URL = 'amqp://tronmanager:dYvca5-sibcur-pydpec@129.154.59.231:5672/TronManager'
-CELERY_RESULT_BACKEND = 'redis://manuel71:P9661144!@152.67.199.109:16379/10'
+CELERY_BROKER_URL = (
+    "amqp://tronmanager:dYvca5-sibcur-pydpec@129.154.59.231:5672/TronManager"
+)
+CELERY_RESULT_BACKEND = "redis://manuel71:P9661144!@152.67.199.109:16379/10"
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']  # JSON을 제외한 다른 content 설정들은 무시
-CELERY_TIMEZONE = 'Asia/Seoul'
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]  # JSON을 제외한 다른 content 설정들은 무시
+CELERY_TIMEZONE = "Asia/Seoul"
 CELERY_ENABLE_UTC = True
 
 CELERY_TASK_ROUTES = {
-    'tron.tasks.add': 'low-priority',
+    "tron.tasks.add": "low-priority",
 }
 
 CELERY_TASK_ANNOTATIONS = {
-    'tron.tasks.add': {'rate_limit': '10/m'},
+    "tron.tasks.add": {"rate_limit": "10/m"},
 }
 
-TRON_NETWORK = config.TRON['network']
+TRON_NETWORK = config.TRON["network"]
