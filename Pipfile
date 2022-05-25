@@ -23,6 +23,7 @@ mnemonic = "*"
 bip32 = "*"
 black = "*"
 pre-commit = "*"
+requests = "*"
 
 [dev-packages]
 

@@ -16,6 +16,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.utils.log import DEFAULT_LOGGING
+from django.utils.translation import gettext_lazy as _
 
 from . import config
 
@@ -183,8 +184,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-from django.utils.translation import gettext_lazy as _
-
 LANGUAGES = [
     ("ko", _("Korean")),
     ("ja", _("Japanese")),
@@ -315,3 +314,6 @@ CELERY_TASK_ANNOTATIONS = {
 }
 
 TRON_NETWORK = config.TRON["network"]
+
+HYPERJ_URL = config.OutSite["hyperj"]
+HYPERNFT_URL = config.OutSite["hypernft"]

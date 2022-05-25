@@ -43,6 +43,10 @@ class Transaction(BaseModelMixin):
         _("컨트랙트 주소"), max_length=34, null=True, blank=True
     )
 
+    message = models.CharField(
+        _("message"), default=None, max_length=256, null=True, blank=True
+    )
+
     class Meta:
         verbose_name = _("트랜잭션")
         verbose_name_plural = _("트랜잭션")

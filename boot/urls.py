@@ -35,6 +35,7 @@ urlpatterns = [
     path("", include("framework.urls")),
     path("tron/", include("tron.urls")),
     path("wallet/", include("wallet.urls")),
+    path("trx/", include("transaction.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
     path("api-auth/", include("rest_framework.urls")),
     re_path(
